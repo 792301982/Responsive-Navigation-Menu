@@ -1,0 +1,22 @@
+*{
+  margin: 0;
+  padding: 0;
+  font-family: "montserrat",sans-serif;
+}
+.header{
+  height: 200px;
+  background: #117ae4;
+  padding: 0 20px;
+  color: #fff;
+  box-shadow:5px 5px 10px #aaa;
+}
+.menu{
+  float: right;
+  line-height: 100px;
+}
+.content{
+  padding: 0 20px;
+}
+.content p{
+  text-align: justify;
+}
