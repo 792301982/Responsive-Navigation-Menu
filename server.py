@@ -39,7 +39,10 @@ def getaudioen():
     if audiofile:
         filepath = "audio/%s.pcm" % uuid.uuid4()
         audiofile.save(filepath)
-    r = translate.client.asr(get_file_content(filepath), 'pcm')
+    r = translate.client.asr(get_file_content(filepath), 'pcm',16000,{
+    'dev_pid': 1737,
+})
+    print(r)
     if(translator_selector=='Baidu'):
         t=translate.trans_baidu(''.join(r['result']), 'en', 'zh')
     if(translator_selector=='Youdao'):
@@ -56,7 +59,9 @@ def getaudiozh():
     if audiofile:
         filepath = "audio/%s.pcm" % uuid.uuid4()
         audiofile.save(filepath)
-    r = translate.client.asr(get_file_content(filepath), 'pcm')
+    r = translate.client.asr(get_file_content(filepath), 'pcm',16000,{
+    'dev_pid': 1537,
+})
     if(translator_selector=='Baidu'):
         t=translate.trans_baidu(''.join(r['result']), 'zh', 'en')
     if(translator_selector=='Youdao'):
@@ -65,6 +70,37 @@ def getaudiozh():
         t=translate.trans_google(''.join(r['result']), 'zh-cn', 'en')
     return t
 
+def is_contain_chinese(check_str):
+    """
+    判断字符串中是否包含中文
+    :param check_str: {str} 需要检测的字符串
+    :return: {bool} 包含返回True， 不包含返回False
+    """
+    for ch in check_str:
+        if u'\u4e00' <= ch <= u'\u9fff':
+            return True
+    return False
+
+
+@app.route('/getstr', methods=['POST'])
+def getstr():
+    translator_selector = request.form["translator_selector"]
+    r=request.form["text"]
+    if(is_contain_chinese(r)):
+        if(translator_selector=='Baidu'):
+            t=translate.trans_baidu(r, 'zh', 'en')
+        if(translator_selector=='Youdao'):
+            t=translate.trans_youdao(r, 'zh-CHS', 'en')
+        if(translator_selector=='Google'):
+            t=translate.trans_google(r, 'zh-cn', 'en')
+    else:
+        if(translator_selector=='Baidu'):
+            t=translate.trans_baidu(r, 'en', 'zh')
+        if(translator_selector=='Youdao'):
+            t=translate.trans_youdao(r, 'en', 'zh-CHS')
+        if(translator_selector=='Google'):
+            t=translate.trans_google(r, 'en', 'zh-cn') 
+    return t
 
 if __name__ == '__main__':
     app.run(debug=True)

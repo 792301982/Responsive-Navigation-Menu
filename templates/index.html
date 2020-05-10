@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <link rel="stylesheet" href="images/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
-    </script>
-  </head>
-  <body>
 
-    <div class="header">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="images/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+  </script>
+</head>
+
+<body>
+
+  <div class="header">
+    <!-- 
       <ul id="Selector">
         <li class="Selector_port"; style="background-image:url(./images/baidu.png);"><input type="radio" name="translator_selector" value="Baidu" checked="checked" >
         </br></li>
@@ -19,8 +22,26 @@
         <li class="Selector_port"; style="background-image:url(./images/google.png);"><input type="radio" name="translator_selector" value="Google">
         </li>
       </ul>
-      <div style="margin-top: 150px; float: left; width: 100%"></div>
-        <ul class="menu">
+       -->
+    <div class="selector_container">
+      <form>
+        <label>
+          <input type="radio" name="translator_selector" value="Baidu" checked="checked" />
+          <span>Baidu</span>
+        </label>
+        <label>
+          <input type="radio" name="translator_selector" value="Youdao" />
+          <span>Youdao</span>
+        </label>
+        <label>
+          <input type="radio" name="translator_selector" value="Google" />
+          <span>Google</span>
+        </label>
+      </form>
+    </div>
+
+    <div style="margin-top: 150px; float: left; width: 100%"></div>
+    <ul class="menu">
 
 
       <div>
@@ -29,13 +50,23 @@
         <input onclick="stopRecording()" type="button" value="停止" /> -->
         <!-- <input onclick="playRecording()" type="button" value="播放" /> -->
         <!-- <input onclick="uploadAudio()" type="button" value="提交" /> -->
-        <button id="sound-record-zh" class="sound-record" onmousedown="myStartRecordingZH()" onmouseup="myStopRecordingZH()" style="float: left">中</button>
-        <button id="sound-record-us" class="sound-record" onmousedown="myStartRecordingUS()" onmouseup="myStopRecordingUS()" style="float: right">EN</button>
-    </div>
+        <button id="sound-record-zh" class="sound-record" onmousedown="myStartRecordingZH()"
+          onmouseup="myStopRecordingZH()" style="float: left">中</button>
+        <button id="sound-record-us" class="sound-record" onmousedown="myStartRecordingUS()"
+          onmouseup="myStopRecordingUS()" style="float: right">EN</button>
+        <div id="searchform">
+          <fieldset>
+            <input id="s" name="s" type="text" value="Enter Keyword" class="text_input"
+              onblur="if(this.value==''){this.value='Enter Keyword';}"
+              onfocus="if(this.value =='Enter Keyword') {this.value=''; }" />
+            <input id="sub" name="submit" type="submit" value="发送" style="color:#fff;font-size:14px;" />
+          </fieldset>
+        </div>
+      </div>
 
-    <script type="text/javascript" src="./images/record.js"></script>
+      <script type="text/javascript" src="./images/record.js"></script>
 
-    <script>
+      <script>
         var recorder;
         var audio = document.querySelector('audio');
         function myStartRecordingZH() {
@@ -75,61 +106,75 @@
 
         }
         function startRecording() {
-            HZRecorder.get(function (rec) {
-                recorder = rec;
-                recorder.start();
-            });
+          HZRecorder.get(function (rec) {
+            recorder = rec;
+            recorder.start();
+          });
         }
 
         function stopRecording() {
-            recorder.stop();
-            uploadAudio();
+          recorder.stop();
+          uploadAudio();
         }
 
         function playRecording() {
-            recorder.play(audio);
+          recorder.play(audio);
         }
 
         function uploadAudioZH() {
-            var formdata = new FormData(); // form 表单 {key:value}
-            formdata.append("audioData", recorder.getBlob()); // form input type="file"
-            formdata.append("translator_selector",$('input:radio[name=translator_selector]:checked').val());
-            $.ajax({
-                url: "/getaudiozh",
-                type: 'post',
-                processData: false,
-                contentType: false,
-                data: formdata,
-                success: function (data) {
-                    console.log(data);
-                    // alert("识别成功");
-                    $("#sb").html(data);
-                    
+          var formdata = new FormData(); // form 表单 {key:value}
+          formdata.append("audioData", recorder.getBlob()); // form input type="file"
+          formdata.append("translator_selector", $('input:radio[name=translator_selector]:checked').val());
+          $.ajax({
+            url: "/getaudiozh",
+            type: 'post',
+            processData: false,
+            contentType: false,
+            data: formdata,
+            success: function (data) {
+              console.log(data);
+              // alert("识别成功");
+              $("#sb").html(data);
 
-                }
-            })
+
+            }
+          })
         };
 
         function uploadAudioEN() {
-            var formdata = new FormData(); // form 表单 {key:value}
-            formdata.append("audioData", recorder.getBlob()); // form input type="file"
-            formdata.append("translator_selector",$('input:radio[name=translator_selector]:checked').val());
-            $.ajax({
-                url: "/getaudioen",
-                type: 'post',
-                processData: false,
-                contentType: false,
-                data: formdata,
-                success: function (data) {
-                    console.log(data);
-                    // alert("识别成功");
-                    $("#sb").html(data);
-            
-                }
-            })
-        };
+          var formdata = new FormData(); // form 表单 {key:value}
+          formdata.append("audioData", recorder.getBlob()); // form input type="file"
+          formdata.append("translator_selector", $('input:radio[name=translator_selector]:checked').val());
+          $.ajax({
+            url: "/getaudioen",
+            type: 'post',
+            processData: false,
+            contentType: false,
+            data: formdata,
+            success: function (data) {
+              console.log(data);
+              // alert("识别成功");
+              $("#sb").html(data);
 
-    </script>
+            }
+          })
+        };
+        $("#sub").click(function () {
+          $.ajax({
+            url: "/getstr",
+            type: 'post',
+            data: {
+              "text":$("#s").val(),
+              "translator_selector":$('input:radio[name=translator_selector]:checked').val()
+            },
+            success: function (data) {
+              console.log(data);
+              // alert("识别成功");
+              $("#sb").html(data);
+            }
+          });
+        });
+      </script>
 
 
 
@@ -138,16 +183,24 @@
   </div>
 
 
-    <div class="content">
+  <div class="content">
 
-        <p id="sb" style="font-weight:bold;color:#117ae4;font-family: 'Microsoft-YaHei';max-width:700px;line-height:40px;    margin: 0 auto;
-    margin-top: 200px;">
-            On March 1st, Beijing University of Technology held welcome ceremony and orientation for new international students in the room 903, fourth teaching building for the year2018 spring semester. Prof. Wu Bin, Vice President of BJUT, Prof. Wang Wei, Directorof International Office, Dean of the College of International Education, andall faculties and staffs of the College of International Education participatedin this event.
+    <p id="sb" style="font-weight:bold;color:#117ae4;font-family: 'Microsoft-YaHei';max-width:700px;line-height:40px;    margin: 0 auto;
+    margin-top: 100px;">
+      On March 1st, Beijing University of Technology held welcome ceremony and orientation for new international
+      students in the room 903, fourth teaching building for the year2018 spring semester. Prof. Wu Bin, Vice President
+      of BJUT, Prof. Wang Wei, Directorof International Office, Dean of the College of International Education, andall
+      faculties and staffs of the College of International Education participatedin this event.
 
-            At first, VicePresident, Prof. Wu Bin warmly welcomed international students and briefed the students on the development of school and international development strategy. President Wu encouraged international students to study hard and think independently under the guidance of teachers, and also actively participate in colorful community activities at this beautiful campus of BJUT. He hopes that all the new students could enjoy every day in BJUT, and be knowledgeable, energized and accomplished!  
-        </p>
+      At first, VicePresident, Prof. Wu Bin warmly welcomed international students and briefed the students on the
+      development of school and international development strategy. President Wu encouraged international students to
+      study hard and think independently under the guidance of teachers, and also actively participate in colorful
+      community activities at this beautiful campus of BJUT. He hopes that all the new students could enjoy every day in
+      BJUT, and be knowledgeable, energized and accomplished!
+    </p>
 
-    
-    </div>
-  </body>
+
+  </div>
+</body>
+
 </html>
