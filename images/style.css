@@ -44,3 +44,15 @@
   background-size:30px 30px;
   -moz-background-size:30px 30px;
 }
+#Selector{
+  margin-left: 20px;;
+  position: absolute;
+  width:200px;
+  height:200px;
+}
+.Selector_port{
+  width:200px;
+  height:50px;
+  margin-top: 15px;;
+  list-style: none;
+}

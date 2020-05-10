@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import os
 import uuid
-import baidu
+import translate
 import json
 
 app = Flask(
@@ -28,26 +28,43 @@ def getaudio():
     if audiofile:
         filepath = "audio/%s.pcm" % uuid.uuid4()
         audiofile.save(filepath)
-    r = baidu.client.asr(get_file_content(filepath), 'pcm')
+    r = translate.client.asr(get_file_content(filepath), 'pcm')
     return r
+
 
 @app.route('/getaudioen', methods=['POST'])
 def getaudioen():
+    translator_selector = request.form["translator_selector"]
     audiofile = request.files.get("audioData")
     if audiofile:
         filepath = "audio/%s.pcm" % uuid.uuid4()
         audiofile.save(filepath)
-    r = baidu.client.asr(get_file_content(filepath), 'pcm')
-    return baidu.translate(''.join(r['result']),'en','zh')
+    r = translate.client.asr(get_file_content(filepath), 'pcm')
+    if(translator_selector=='Baidu'):
+        t=translate.trans_baidu(''.join(r['result']), 'en', 'zh')
+    if(translator_selector=='Youdao'):
+        t=translate.trans_youdao(''.join(r['result']), 'en', 'zh-CHS')
+    if(translator_selector=='Google'):
+        t=translate.trans_google(''.join(r['result']), 'en', 'zh-cn')
+    return t
+
 
 @app.route('/getaudiozh', methods=['POST'])
 def getaudiozh():
+    translator_selector = request.form["translator_selector"]
     audiofile = request.files.get("audioData")
     if audiofile:
         filepath = "audio/%s.pcm" % uuid.uuid4()
         audiofile.save(filepath)
-    r = baidu.client.asr(get_file_content(filepath), 'pcm')
-    return baidu.translate(''.join(r['result']),'zh','en')
+    r = translate.client.asr(get_file_content(filepath), 'pcm')
+    if(translator_selector=='Baidu'):
+        t=translate.trans_baidu(''.join(r['result']), 'zh', 'en')
+    if(translator_selector=='Youdao'):
+        t=translate.trans_youdao(''.join(r['result']), 'zh-CHS', 'en')
+    if(translator_selector=='Google'):
+        t=translate.trans_google(''.join(r['result']), 'zh-cn', 'en')
+    return t
+
 
 if __name__ == '__main__':
     app.run(debug=True)

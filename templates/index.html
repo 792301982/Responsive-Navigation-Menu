@@ -11,6 +11,14 @@
   <body>
 
     <div class="header">
+      <ul id="Selector">
+        <li class="Selector_port"; style="background-image:url(./images/baidu.png);"><input type="radio" name="translator_selector" value="Baidu" checked="checked" >
+        </br></li>
+        <li class="Selector_port"; style="background-image:url(./images/youdao.png);"><input type="radio" name="translator_selector" value="Youdao">
+        </br></li>
+        <li class="Selector_port"; style="background-image:url(./images/google.png);"><input type="radio" name="translator_selector" value="Google">
+        </li>
+      </ul>
       <div style="margin-top: 150px; float: left; width: 100%"></div>
         <ul class="menu">
 
@@ -85,6 +93,7 @@
         function uploadAudioZH() {
             var formdata = new FormData(); // form 表单 {key:value}
             formdata.append("audioData", recorder.getBlob()); // form input type="file"
+            formdata.append("translator_selector",$('input:radio[name=translator_selector]:checked').val());
             $.ajax({
                 url: "/getaudiozh",
                 type: 'post',
@@ -104,6 +113,7 @@
         function uploadAudioEN() {
             var formdata = new FormData(); // form 表单 {key:value}
             formdata.append("audioData", recorder.getBlob()); // form input type="file"
+            formdata.append("translator_selector",$('input:radio[name=translator_selector]:checked').val());
             $.ajax({
                 url: "/getaudioen",
                 type: 'post',
@@ -130,7 +140,8 @@
 
     <div class="content">
 
-        <p id="sb" style="font-weight:bold;color:#117ae4;font-family: 'Microsoft-YaHei';margin-top:60px;max-width:700px;line-height:40px;margin-left:350px;">
+        <p id="sb" style="font-weight:bold;color:#117ae4;font-family: 'Microsoft-YaHei';max-width:700px;line-height:40px;    margin: 0 auto;
+    margin-top: 200px;">
             On March 1st, Beijing University of Technology held welcome ceremony and orientation for new international students in the room 903, fourth teaching building for the year2018 spring semester. Prof. Wu Bin, Vice President of BJUT, Prof. Wang Wei, Directorof International Office, Dean of the College of International Education, andall faculties and staffs of the College of International Education participatedin this event.
 
             At first, VicePresident, Prof. Wu Bin warmly welcomed international students and briefed the students on the development of school and international development strategy. President Wu encouraged international students to study hard and think independently under the guidance of teachers, and also actively participate in colorful community activities at this beautiful campus of BJUT. He hopes that all the new students could enjoy every day in BJUT, and be knowledgeable, energized and accomplished!  
