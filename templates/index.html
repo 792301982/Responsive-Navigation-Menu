@@ -10,29 +10,62 @@
   </head>
   <body>
 
-  <div class="header">
-
-
-    <ul class="menu">
+    <div class="header">
+      <div style="margin-top: 150px; float: left; width: 100%"></div>
+        <ul class="menu">
 
 
       <div>
         <audio autoplay></audio>
-        <input onclick="startRecording()" type="button" value="录音" />
-        <input onclick="stopRecording()" type="button" value="停止" />
+        <!-- <input onclick="startRecording()" type="button" value="录音" />
+        <input onclick="stopRecording()" type="button" value="停止" /> -->
         <!-- <input onclick="playRecording()" type="button" value="播放" /> -->
         <!-- <input onclick="uploadAudio()" type="button" value="提交" /> -->
-        
+        <button id="sound-record-zh" class="sound-record" onmousedown="myStartRecordingZH()" onmouseup="myStopRecordingZH()" style="float: left">中</button>
+        <button id="sound-record-us" class="sound-record" onmousedown="myStartRecordingUS()" onmouseup="myStopRecordingUS()" style="float: right">EN</button>
     </div>
 
     <script type="text/javascript" src="./images/record.js"></script>
 
     <script>
-
         var recorder;
-
         var audio = document.querySelector('audio');
+        function myStartRecordingZH() {
+          var layoutLoading = document.getElementById('sound-record-zh');
+          layoutLoading.innerHTML = '';
+          layoutLoading.classList.add("layoutLoading");
+          HZRecorder.get(function (rec) {
+            recorder = rec;
+            recorder.start();
+          });
+        }
+        function myStopRecordingZH() {
+          var layoutLoading = document.getElementById('sound-record-zh');
+          layoutLoading.classList.remove("layoutLoading");
+          layoutLoading.innerHTML = '中';
+          recorder.stop();
+          uploadAudioZH();
 
+        }
+        function myStartRecordingUS() {
+          var layoutLoading = document.getElementById('sound-record-us');
+          layoutLoading.innerHTML = '';
+          layoutLoading.classList.add("layoutLoading");
+          HZRecorder.get(function (rec) {
+            recorder = rec;
+            recorder.start();
+          });
+
+        }
+        function myStopRecordingUS() {
+          var layoutLoading = document.getElementById('sound-record-us');
+          layoutLoading.classList.remove("layoutLoading");
+          layoutLoading.innerHTML = 'EN';
+          recorder.stop();
+          uploadAudioEN();
+          // recorder.play(audio);
+
+        }
         function startRecording() {
             HZRecorder.get(function (rec) {
                 recorder = rec;
@@ -49,23 +82,39 @@
             recorder.play(audio);
         }
 
-        function uploadAudio() {
+        function uploadAudioZH() {
             var formdata = new FormData(); // form 表单 {key:value}
             formdata.append("audioData", recorder.getBlob()); // form input type="file"
             $.ajax({
-                url: "/getaudio",
+                url: "/getaudiozh",
                 type: 'post',
                 processData: false,
                 contentType: false,
                 data: formdata,
-                dataType: 'json',
                 success: function (data) {
                     console.log(data);
-                    alert("识别成功");
-                    if(data['err_no']==0){
-                        $("#sb").html(data['result']);
-                    }
+                    // alert("识别成功");
+                    $("#sb").html(data);
+                    
 
+                }
+            })
+        };
+
+        function uploadAudioEN() {
+            var formdata = new FormData(); // form 表单 {key:value}
+            formdata.append("audioData", recorder.getBlob()); // form input type="file"
+            $.ajax({
+                url: "/getaudioen",
+                type: 'post',
+                processData: false,
+                contentType: false,
+                data: formdata,
+                success: function (data) {
+                    console.log(data);
+                    // alert("识别成功");
+                    $("#sb").html(data);
+            
                 }
             })
         };
@@ -86,18 +135,7 @@
 
             At first, VicePresident, Prof. Wu Bin warmly welcomed international students and briefed the students on the development of school and international development strategy. President Wu encouraged international students to study hard and think independently under the guidance of teachers, and also actively participate in colorful community activities at this beautiful campus of BJUT. He hopes that all the new students could enjoy every day in BJUT, and be knowledgeable, energized and accomplished!  
         </p>
-      <script>
-        var oDiv = document.getElementById('div1')
-          var myVar;
-          oDiv.onmousedown = function () {
-              myVar = setTimeout(function () {
-                  alert('aa');
-              }, 1000);
-          }
-          oDiv.onmouseup = function () {
-              clearTimeout(myVar);
-          }
-      </script>
+
     
     </div>
   </body>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="images/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+
+  <div class="header">
+    <div style="margin-top: 150px; float: left; width: 100%"></div>
+    <div class="menu">
+      <div>
+        <audio autoplay></audio>
+<!--        <input onclick="startRecording()" type="button" value="录音" />-->
+<!--        <input onclick="stopRecording()" type="button" value="停止" />-->
+<!--        <input onclick="playRecording()" type="button" value="播放" /> -->
+<!--        <input onclick="uploadAudio()" type="button" value="提交" />-->
+        <button id="sound-record-zh" class="sound-record" onmousedown="myStartRecordingZH()" onmouseup="myStopRecordingZH()" style="float: left">中</button>
+        <button id="sound-record-us" class="sound-record" onmousedown="myStartRecordingUS()" onmouseup="myStopRecordingUS()" style="float: right">EN</button>
+      </div>
+    <script type="text/javascript" src="./images/record.js"></script>
+    <script>
+        var recorder;
+        var audio = document.querySelector('audio');
+        function myStartRecordingZH() {
+          var layoutLoading = document.getElementById('sound-record-zh');
+          layoutLoading.innerHTML = '';
+          layoutLoading.classList.add("layoutLoading");
+          HZRecorder.get(function (rec) {
+            recorder = rec;
+            recorder.start();
+          });
+        }
+        function myStopRecordingZH() {
+          var layoutLoading = document.getElementById('sound-record-zh');
+          layoutLoading.classList.remove("layoutLoading");
+          layoutLoading.innerHTML = '中';
+          recorder.stop();
+
+        }
+        function myStartRecordingUS() {
+          var layoutLoading = document.getElementById('sound-record-us');
+          layoutLoading.innerHTML = '';
+          layoutLoading.classList.add("layoutLoading");
+          HZRecorder.get(function (rec) {
+            recorder = rec;
+            recorder.start();
+          });
+
+        }
+        function myStopRecordingUS() {
+          var layoutLoading = document.getElementById('sound-record-us');
+          layoutLoading.classList.remove("layoutLoading");
+          layoutLoading.innerHTML = 'EN';
+          recorder.stop();
+          recorder.play(audio);
+
+        }
+
+        function startRecording() {
+          HZRecorder.get(function (rec) {
+              recorder = rec;
+              recorder.start();
+          })
+        }
+
+        function stopRecording() {
+            recorder.stop();
+        }
+
+        function playRecording() {
+            recorder.play(audio);
+        }
+
+        function uploadAudio() {
+            recorder.upload("/upload", function (state, e) {
+                switch (state) {
+                    case 'uploading':
+                        //var percentComplete = Math.round(e.loaded * 100 / e.total) + '%';
+                        break;
+                    case 'ok':
+                        //alert(e.target.responseText);
+                        alert("上传成功");
+                        break;
+                    case 'error':
+                        alert("上传失败");
+                        break;
+                    case 'cancel':
+                        alert("上传被取消");
+                        break;
+                }
+            });
+        }
+    </script>
+    </div>
+  </div>
+  </div>
+
+
+    <div class="content">
+
+        <p style="font-weight:bold;color:#117ae4;font-family: 'Microsoft-YaHei';margin-top:60px;max-width:700px;line-height:40px;margin-left:350px;">
+            On March 1st, Beijing University of Technology held welcome ceremony and orientation for new international students in the room 903, fourth teaching building for the year2018 spring semester. Prof. Wu Bin, Vice President of BJUT, Prof. Wang Wei, Directorof International Office, Dean of the College of International Education, andall faculties and staffs of the College of International Education participatedin this event.
+
+            At first, VicePresident, Prof. Wu Bin warmly welcomed international students and briefed the students on the development of school and international development strategy. President Wu encouraged international students to study hard and think independently under the guidance of teachers, and also actively participate in colorful community activities at this beautiful campus of BJUT. He hopes that all the new students could enjoy every day in BJUT, and be knowledgeable, energized and accomplished!
+        </p>
+
+
+    </div>
+  </body>
+</html>
